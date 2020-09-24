@@ -1,8 +1,8 @@
 import * as mysql from "mysql2";
-import * as Sequlize from 'sequelize';
+import * as Sequelize from 'sequelize';
 
 // @ts-ignore
-export const sequlize = new Sequlize('twitter', 'root', 'root', {
+export const sequelize  = new Sequelize('twitter', 'root', 'root', {
     dialect: 'mysql',
     host: 'localhost'
 });

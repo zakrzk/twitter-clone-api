@@ -1,19 +1,19 @@
-import * as Sequlize from 'sequelize'
-import {sequlize} from "../util/database";
+import * as Sequelize from 'sequelize'
+import {sequelize} from "../util/database";
 
-export const Tweet = sequlize.define('tweet', {
+export const Tweet = sequelize.define('tweet', {
     id: {
-        type: Sequlize.INTEGER,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
     user_id: {
-        type: Sequlize.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     value: {
-        type: Sequlize.STRING,
+        type: Sequelize.STRING,
         allowNull: false
     }
 });
