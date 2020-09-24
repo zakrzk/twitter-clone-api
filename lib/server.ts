@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Request, Response, NextFunction } from 'express';
+import {Request, Response, NextFunction} from 'express';
 
 import * as bodyParser from 'body-parser';
 import {sequelize} from "./util/database";
@@ -29,7 +29,7 @@ Tweet.belongsTo(User, {
 });
 User.hasMany(Tweet);
 
-sequelize.sync()
+sequelize.sync({force: true})
     .then(res => {
         return User.findByPk(1)
     }).then(user => {
