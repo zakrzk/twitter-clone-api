@@ -8,9 +8,9 @@ export const Tweet = sequelize.define('tweet', {
         allowNull: false,
         primaryKey: true
     },
-    user_id: {
+    userId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        foreignKey: true,
     },
     value: {
         type: Sequelize.STRING,
