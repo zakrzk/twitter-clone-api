@@ -1,15 +1,24 @@
-import {Request, Response, NextFunction} from 'express';
+import {Request, Response} from 'express';
 import {Tweet} from "../models/tweet.model";
 import {User} from "../models/user.model";
-import {create} from "domain";
 
-export const postAddTweet = (req: Request, res: Response, next: NextFunction) => {
+export const postAddTweet = (req: Request, res: Response) => {
 
     let value: string = req.body.value;
+
+    if (typeof value !== "string") {
+        res.status(400).send({
+            error: "Tweet must be type of string."
+        });
+        return;
+    }
+
     if (value) value = value.trim();
 
     if (!value || value.length === 0 || value.length > 255) {
-        res.status(400).send("Tweet's length must be between 1 and 255 characters.");
+        res.status(400).send({
+            error: "Bad Request: Tweet's length must be between 1 and 255 characters."
+        });
         return;
     }
     // @ts-ignore
@@ -20,7 +29,7 @@ export const postAddTweet = (req: Request, res: Response, next: NextFunction) =>
         }).catch(err => console.log(err));
 };
 
-export const getFeed = (req: Request, res: Response, next: NextFunction) => {
+export const getFeed = (req: Request, res: Response) => {
     Tweet.findAll({
         limit: 100,
         order: [['updatedAt', 'DESC']],
@@ -37,10 +46,15 @@ export const getFeed = (req: Request, res: Response, next: NextFunction) => {
         .catch(err => console.log(err));
 };
 
-export const deleteTweet = (req: Request, res: Response, next: NextFunction) => {
-    const tweetId: number = req.body.tweetId;
-    // @ts-ignore
+export const deleteTweet = (req: Request, res: Response) => {
 
+    const tweetId: number = req.body.tweetId;
+
+    if (!tweetId || typeof tweetId !== "number") {
+        res.status(400).send({error: 'Bad Request: tweetId must be type of number'});
+        return;
+    }
+    // @ts-ignore
     Tweet.findByPk(tweetId).then(token => {
 
         if (token !== null) {
@@ -48,7 +62,7 @@ export const deleteTweet = (req: Request, res: Response, next: NextFunction) => 
             const createdAt: number = new Date(token['dataValues'].createdAt).getTime();
             const diffTimeMs: number = Date.now() - createdAt;
             if (diffTimeMs > 3 * 60 * 1000) {
-                res.status(400).send("Too late!");
+                res.status(400).send('Too late!');
             } else {
                 Tweet.destroy({where: {id: tweetId}});
                 res.status(204).send('Tweet deleted.');
