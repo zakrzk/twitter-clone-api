@@ -3,7 +3,13 @@ import {Tweet} from "../models/tweet.model";
 
 export const postAddTweet = (req: Request, res: Response, next: NextFunction) => {
 
-    const value: string = req.body.value;
+    let value: string = req.body.value;
+    if (value) value = value.trim();
+
+    if (!value || value.length === 0 || value.length > 255) {
+        res.status(400).send("Tweet's length must be between 1 and 255 characters.");
+        return;
+    }
     // @ts-ignore
     req.user
         .createTweet({value: value})
@@ -23,8 +29,7 @@ export const getFeed = (req: Request, res: Response, next: NextFunction) => {
 export const deleteTweet = (req: Request, res: Response, next: NextFunction) => {
     const tweetId: number = req.body.tweetId;
     // @ts-ignore
-
-
+    
     Tweet.destroy({where: {id: tweetId}})
 
     // todo check if exists, return error if doesn't
