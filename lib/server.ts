@@ -8,6 +8,7 @@ import {Tweet} from "./models/tweet.model";
 import {User} from "./models/user.model";
 
 const app = express();
+const authRoutes = require('./routes/auth.routes');
 const tweetRoutes = require('./routes/tweets.routes');
 
 app.use(bodyParser.json());
@@ -21,6 +22,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     }).catch(err => console.log(err))
 });
 app.use('/tweet', tweetRoutes);
+app.use('/auth', authRoutes);
 app.use(errorController);
 
 Tweet.belongsTo(User, {
@@ -29,7 +31,7 @@ Tweet.belongsTo(User, {
 });
 User.hasMany(Tweet);
 
-sequelize.sync({force:true})
+sequelize.sync({force: true})
     .then(res => {
         return User.findByPk(1)
     }).then(user => {

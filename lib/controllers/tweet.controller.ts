@@ -14,7 +14,6 @@ export const postAddTweet = (req: Request, res: Response) => {
     }
 
     if (value) value = value.trim();
-
     if (!value || value.length === 0 || value.length > 255) {
         res.status(400).send({
             error: "Bad Request: Tweet's length must be between 1 and 255 characters."
