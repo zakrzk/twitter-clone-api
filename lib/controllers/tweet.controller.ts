@@ -34,16 +34,23 @@ export const getFeed = (req: Request, res: Response, next: NextFunction) => {
             res.send(tweets);
         })
         .catch(err => console.log(err));
-};
-
+}
 export const deleteTweet = (req: Request, res: Response, next: NextFunction) => {
     const tweetId: number = req.body.tweetId;
     // @ts-ignore
 
-    Tweet.destroy({where: {id: tweetId}})
+    Tweet.findByPk(tweetId).then(token => {
 
-    // todo check if exists, return error if doesn't
+        if (token !== null){
+            Tweet.destroy({where: {id: tweetId}});
+            res.status(204).send('Tweet deleted.');
+        }
+        else {
+            res.status(400).send(`Tweet with id ${tweetId} not found.`);
+        }
+
+    }).catch(err => console.log(err))
+
+
     // todo check if it's under 3 minutes
-        .then(tweet => tweet !== null).then(res => console.log(res))
-        .catch(err => console.log(err))
 };
