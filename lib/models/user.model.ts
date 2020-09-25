@@ -16,6 +16,9 @@ export const User = sequelize.define('user', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    name: Sequelize.STRING,
-    description: Sequelize.STRING,
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    description: Sequelize.STRING
 });
