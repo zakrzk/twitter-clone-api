@@ -29,7 +29,7 @@ Tweet.belongsTo(User, {
 });
 User.hasMany(Tweet);
 
-sequelize.sync({force: true})
+sequelize.sync({force:true})
     .then(res => {
         return User.findByPk(1)
     }).then(user => {

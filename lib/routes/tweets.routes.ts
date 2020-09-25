@@ -1,8 +1,9 @@
 import {Router} from 'express';
-import {getFeed, postAddTweet} from '../controllers/tweet.controller'
+import {getFeed, postAddTweet, deleteTweet} from '../controllers/tweet.controller'
 const router = Router();
 
 router.post('/add', postAddTweet);
 router.get('/feed', getFeed);
+router.delete('/delete', deleteTweet);
 
 module.exports = router;
