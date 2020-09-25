@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import {Tweet} from "../models/tweet.model";
+import {User} from "../models/user.model";
 
 export const postAddTweet = (req: Request, res: Response, next: NextFunction) => {
 
@@ -19,7 +20,16 @@ export const postAddTweet = (req: Request, res: Response, next: NextFunction) =>
 };
 
 export const getFeed = (req: Request, res: Response, next: NextFunction) => {
-    Tweet.findAll({limit: 100, order: [['updatedAt', 'DESC']]})
+    Tweet.findAll({
+        limit: 100,
+        order: [['updatedAt', 'DESC']],
+        include: [{
+            model: User,
+            as: User.name,
+            attributes: ['name']
+        }],
+        attributes: ['value', 'createdAt'],
+    })
         .then(tweets => {
             res.send(tweets);
         })
@@ -29,7 +39,7 @@ export const getFeed = (req: Request, res: Response, next: NextFunction) => {
 export const deleteTweet = (req: Request, res: Response, next: NextFunction) => {
     const tweetId: number = req.body.tweetId;
     // @ts-ignore
-    
+
     Tweet.destroy({where: {id: tweetId}})
 
     // todo check if exists, return error if doesn't
