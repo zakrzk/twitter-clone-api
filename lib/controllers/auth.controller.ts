@@ -1,4 +1,5 @@
 import {Request, Response} from "express";
+import * as bcrypt from 'bcryptjs'
 import {User} from "../models/user.model";
 
 export const postRegisterUser = (req: Request, res: Response) => {
@@ -10,18 +11,22 @@ export const postRegisterUser = (req: Request, res: Response) => {
 
     User.findOne({where: {email: email}}).then(userObj => {
         if (userObj) {
-            res.status(400).send({err: 'Email already registered.'})
-        } else {
-            User.create({
-                email: email,
-                password: password,
-                name: name,
-                description: description
-            }).then(respond => {
-                res.status(201).send();
-            }).catch(err => console.log(err));
-
+            return res.status(400).send({err: 'Email already registered.'})
         }
-
+        bcrypt.hash(password, 12)
+            .then(hashPass => {
+                User.create({
+                    email: email,
+                    password: hashPass,
+                    name: name,
+                    description: description
+                })
+                    .then(obj => {
+                        res.status(201).send({
+                            email: obj.email,
+                            name: obj.name,
+                        })
+                    })
+            }).catch(err => console.log(err));
     })
-}
+};
