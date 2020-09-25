@@ -1,29 +1,20 @@
 import {Request, Response} from 'express';
 import {Tweet} from "../models/tweet.model";
 import {User} from "../models/user.model";
+import {validationResult} from "express-validator";
 
 export const postAddTweet = (req: Request, res: Response) => {
 
     let value: string = req.body.value;
 
-    if (typeof value !== "string") {
-        res.status(400).send({
-            error: "Tweet must be type of string."
-        });
-        return;
-    }
-
-    if (value) value = value.trim();
-    if (!value || value.length === 0 || value.length > 255) {
-        res.status(400).send({
-            error: "Bad Request: Tweet's length must be between 1 and 255 characters."
-        });
-        return;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).send(errors.array())
     }
     // @ts-ignore
     req.user
         .createTweet({value: value})
-        .then(respond => {
+        .then(() => {
             res.sendStatus(201);
         }).catch(err => console.log(err));
 };
@@ -47,13 +38,12 @@ export const getFeed = (req: Request, res: Response) => {
 
 export const deleteTweet = (req: Request, res: Response) => {
 
-    const tweetId: number = req.body.tweetId;
-
-    if (!tweetId || typeof tweetId !== "number") {
-        res.status(400).send({error: 'Bad Request: tweetId must be type of number'});
-        return;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).send(errors.array())
     }
-    // @ts-ignore
+
+    const tweetId: number = req.body.tweetId;
     Tweet.findByPk(tweetId).then(token => {
 
         if (token !== null) {
