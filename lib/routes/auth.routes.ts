@@ -10,17 +10,17 @@ router.post('/register', [
             .isEmail()
             .withMessage("Email not valid")
             .bail()
+            .normalizeEmail()
             .custom((value) => {
                 return User.findOne({where: {email: value}}).then(user => {
                     if (user) return Promise.reject()
                 })
-            })
-            .normalizeEmail(),
+            }),
         body('password')
             .exists()
-            .isLength({min: 8})
+            .isLength({min: 8, max: 64})
             .isString()
-            .withMessage('Password must be minimum 8 characters long'),
+            .withMessage('Password must be between 8 and 64 characters long'),
         body('passwordConfirmation')
             .exists()
             .custom((value, {req}) => value === req.body.password)
