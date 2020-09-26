@@ -15,5 +15,5 @@ export const Tweet = sequelize.define('tweet', {
     value: {
         type: Sequelize.STRING,
         allowNull: false
-    }
+    },
 });

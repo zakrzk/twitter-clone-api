@@ -44,11 +44,9 @@ export const deleteTweet = (req: Request, res: Response) => {
     }
 
     const tweetId: number = req.body.tweetId;
-    Tweet.findByPk(tweetId).then(token => {
-
-        if (token !== null) {
+    Tweet.findByPk(tweetId).then(tweetObj => {
             // check if it's within 3 minutes
-            const createdAt: number = new Date(token['dataValues'].createdAt).getTime();
+            const createdAt: number = new Date(tweetObj['dataValues'].createdAt).getTime();
             const diffTimeMs: number = Date.now() - createdAt;
             if (diffTimeMs > 3 * 60 * 1000) {
                 res.status(400).send('Too late!');
@@ -56,9 +54,5 @@ export const deleteTweet = (req: Request, res: Response) => {
                 Tweet.destroy({where: {id: tweetId}});
                 res.status(204).send('Tweet deleted.');
             }
-        } else {
-            res.status(400).send(`Tweet with id ${tweetId} not found.`);
-        }
-
     }).catch(err => console.log(err))
 };

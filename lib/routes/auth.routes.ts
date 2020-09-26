@@ -46,7 +46,7 @@ router.post('/login', [
                 if (!user) return Promise.reject()
             })
         })
-        .withMessage("User not registered."),
+        .withMessage("User not registered.")
 ], postLoginUser);
 
 
