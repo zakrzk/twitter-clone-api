@@ -17,9 +17,14 @@ router.post('/register', [
             })
             .normalizeEmail(),
         body('password')
+            .exists()
             .isLength({min: 8})
             .isString()
-            .withMessage("Password must be minimum 8 characters long"),
+            .withMessage('Password must be minimum 8 characters long'),
+        body('passwordConfirmation')
+            .exists()
+            .custom((value, {req}) => value === req.body.password)
+            .withMessage('Password and password confirmation must be the same.'),
         body('name')
             .exists()
             .isString()
