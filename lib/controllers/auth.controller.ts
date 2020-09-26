@@ -1,5 +1,6 @@
-import {Request, Response} from "express";
 import * as bcrypt from 'bcryptjs'
+import * as jwt from 'jsonwebtoken';
+import {Request, Response} from "express";
 import {User} from "../models/user.model";
 import {validationResult} from "express-validator/check";
 
@@ -24,7 +25,7 @@ export const postRegisterUser = (req: Request, res: Response) => {
             })
                 .then(obj => {
                     res.status(201).send({
-                        message: "User registered",
+                        message: "User registered successfully.",
                         email: obj.email,
                         name: obj.name,
                     })
@@ -42,18 +43,27 @@ export const postLoginUser = (req: Request, res: Response) => {
 
     const email: string = req.body.email;
     const password: string = req.body.password;
+    let tempUser;
 
     User.findOne({where: {email: email}})
         .then(user => {
+            tempUser = user;
             bcrypt.compare(password, user.password)
                 .then(passMatch => {
                     if (!passMatch) {
                         return res.send({err: 'Email / password did not match.'})
                     }
-                    res.setHeader('Set-Cookie', 'loggedIn=true');
-                    return res.send("Logged in")
+                    // todo export to .env
+                    const token = jwt.sign({
+                        userId: tempUser.id,
+                        email: tempUser.email},
+                        'secret123',
+                        {expiresIn: '1h'},
+                        );
+                    res.status(200).json({userId: tempUser.id, token: token});
                 })
                 .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
 };
+

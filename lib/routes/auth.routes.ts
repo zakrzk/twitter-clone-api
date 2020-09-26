@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {postRegisterUser, postLoginUser} from "../controllers/auth.controller";
+
 import {body} from 'express-validator/check';
 import {User} from "../models/user.model";
 
@@ -47,6 +48,7 @@ router.post('/login', [
         })
         .withMessage("User not registered."),
 ], postLoginUser);
+
 
 
 module.exports = router;

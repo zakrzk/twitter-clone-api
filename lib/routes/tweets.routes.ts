@@ -1,7 +1,8 @@
 import {Router} from 'express';
-import {body} from 'express-validator/check';
+import {body, header} from 'express-validator/check';
 import {getFeed, postAddTweet, deleteTweet} from '../controllers/tweet.controller';
 import {Tweet} from "../models/tweet.model";
+import {isLogged} from "../middleware/isLogged.middleware";
 
 const router = Router();
 
@@ -27,5 +28,12 @@ router.delete('/delete', [
         .withMessage('Tweet does not exist')
 ], deleteTweet);
 
-router.get('/feed', getFeed);
+router.get('/feed', [
+    header('Authentication')
+        .exists()
+        .bail(),
+    isLogged
+], getFeed);
+
+
 module.exports = router;
