@@ -24,9 +24,10 @@ router.delete('/delete', [
         .withMessage('TweetId must be type of number')
         .bail()
         .custom((value) => {
-            return Tweet.findOne({where: {id: value}}).then(tweet => {
-                if (!tweet) return Promise.reject()
-            })
+            return Tweet.findOne({where: {id: value}})
+                .then(tweet => {
+                    if (!tweet) return Promise.reject()
+                })
         })
         .withMessage('Tweet does not exist'),
     header('Authentication')

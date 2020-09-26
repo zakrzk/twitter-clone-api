@@ -13,9 +13,10 @@ router.post('/register', [
             .bail()
             .normalizeEmail()
             .custom((value) => {
-                return User.findOne({where: {email: value}}).then(user => {
-                    if (user) return Promise.reject()
-                })
+                return User.findOne({where: {email: value}})
+                    .then(user => {
+                        if (user) return Promise.reject()
+                    })
             })
             .withMessage('Email already registered.'),
         body('password')
@@ -34,7 +35,6 @@ router.post('/register', [
             .trim()
             .withMessage('Name must not be empty.'),
         body('description').trim()
-
     ],
     postRegisterUser);
 
@@ -43,9 +43,10 @@ router.post('/login', [
         .isEmail()
         .normalizeEmail()
         .custom((value) => {
-            return User.findOne({where: {email: value}}).then(user => {
-                if (!user) return Promise.reject()
-            })
+            return User.findOne({where: {email: value}})
+                .then(user => {
+                    if (!user) return Promise.reject()
+                })
         })
         .withMessage("User not registered.")
 ], postLoginUser);

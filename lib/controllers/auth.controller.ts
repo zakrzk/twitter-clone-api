@@ -2,11 +2,11 @@ import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken';
 import {Request, Response} from "express";
 import {User} from "../models/user.model";
-import {validationResult} from "express-validator/check";
+import {Result, validationResult} from "express-validator/check";
 
 export const postRegisterUser = (req: Request, res: Response) => {
 
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).send(errors.array())
     }
@@ -25,7 +25,7 @@ export const postRegisterUser = (req: Request, res: Response) => {
             })
                 .then(obj => {
                     res.status(201).send({
-                        message: "User registered successfully.",
+                        message: 'User registered successfully.',
                         email: obj.email,
                         name: obj.name,
                     })
@@ -36,7 +36,7 @@ export const postRegisterUser = (req: Request, res: Response) => {
 
 export const postLoginUser = (req: Request, res: Response) => {
 
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).send(errors.array())
     }

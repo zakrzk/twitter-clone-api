@@ -1,3 +1,5 @@
-export const sendStatus = (req, res) => {
+import {Request, Response} from "express";
+
+export const sendStatus = (req: Request, res: Response) => {
     res.send({status: 'ok'})
 };

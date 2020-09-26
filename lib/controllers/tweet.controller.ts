@@ -2,13 +2,13 @@ import {Request, Response} from 'express';
 import {Tweet} from "../models/tweet.model";
 import {User} from "../models/user.model";
 import * as jwt from "jsonwebtoken";
-import {validationResult} from "express-validator";
+import {Result, validationResult} from "express-validator";
 
 export const postAddTweet = (req: Request, res: Response) => {
 
     let value: string = req.body.value;
 
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).send(errors.array())
     }
@@ -16,10 +16,12 @@ export const postAddTweet = (req: Request, res: Response) => {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     // @ts-ignore
-    User.findByPk(decodedToken.userId).then(user => user.createTweet({value: value}))
+    User.findByPk(decodedToken.userId)
+        .then(user => user.createTweet({value: value}))
         .then(() => {
             res.sendStatus(201);
-        }).catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
 };
 
 export const getFeed = (req: Request, res: Response) => {
@@ -33,15 +35,13 @@ export const getFeed = (req: Request, res: Response) => {
         }],
         attributes: ['value', 'createdAt'],
     })
-        .then(tweets => {
-            res.send(tweets);
-        })
+        .then(tweets => res.send(tweets))
         .catch(err => console.log(err));
 };
 
 export const deleteTweet = (req: Request, res: Response) => {
 
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).send(errors.array())
     }
@@ -63,5 +63,6 @@ export const deleteTweet = (req: Request, res: Response) => {
             Tweet.destroy({where: {id: tweetId}});
             res.status(204).send('Tweet deleted.');
         }
-    }).catch(err => console.log(err))
+    })
+        .catch(err => console.log(err))
 };
