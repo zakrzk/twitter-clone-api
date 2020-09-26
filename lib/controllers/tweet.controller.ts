@@ -13,8 +13,7 @@ export const postAddTweet = (req: Request, res: Response) => {
         return res.status(400).send(errors.array())
     }
     const token: string = req.get('Authentication').split(' ')[1];
-    //todo export to .env
-    const decodedToken = jwt.verify(token, 'secret123');
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     // @ts-ignore
     User.findByPk(decodedToken.userId).then(user => user.createTweet({value: value}))

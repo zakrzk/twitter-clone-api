@@ -12,8 +12,7 @@ export const isLogged = (req: Request, res: Response, next: NextFunction) => {
     const token: string = req.get('Authentication').split(' ')[1];
     let decodedToken;
     try {
-        //todo export to .env
-        decodedToken = jwt.verify(token, 'secret123');
+        decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
         return res.status(500).json({
             error: err.message,

@@ -53,12 +53,11 @@ export const postLoginUser = (req: Request, res: Response) => {
                     if (!passMatch) {
                         return res.send({err: 'Email / password did not match.'})
                     }
-                    // todo export to .env
                     const token = jwt.sign({
                         userId: tempUser.id,
                         email: tempUser.email},
-                        'secret123',
-                        {expiresIn: '1h'},
+                        process.env.JWT_SECRET,
+                        {expiresIn: process.env.JWT_EXPIRY_AGE},
                         );
                     res.status(200).json({userId: tempUser.id, token: token});
                 })
