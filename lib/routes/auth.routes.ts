@@ -16,7 +16,8 @@ router.post('/register', [
                 return User.findOne({where: {email: value}}).then(user => {
                     if (user) return Promise.reject()
                 })
-            }),
+            })
+            .withMessage('Email already registered.'),
         body('password')
             .exists()
             .isLength({min: 8, max: 64})
@@ -48,7 +49,5 @@ router.post('/login', [
         })
         .withMessage("User not registered.")
 ], postLoginUser);
-
-
 
 module.exports = router;

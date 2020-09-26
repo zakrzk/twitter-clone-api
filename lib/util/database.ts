@@ -6,4 +6,3 @@ export const sequelize  = new Sequelize('twitter', 'root', 'root', {
     dialect: 'mysql',
     host: 'localhost'
 });
-

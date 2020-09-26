@@ -3,7 +3,6 @@ import {body, header} from 'express-validator/check';
 import {getFeed, postAddTweet, deleteTweet} from '../controllers/tweet.controller';
 import {Tweet} from "../models/tweet.model";
 import {isLogged} from "../middleware/isLogged.middleware";
-import {isTweetAuthor} from "../middleware/isTweetAuthor.middleware";
 
 const router = Router();
 
@@ -13,7 +12,9 @@ router.post('/add', [
         .trim()
         .isLength({min: 1, max: 255})
         .withMessage('Tweet\'s length must be between 1 and 255 characters.'),
-    isLogged
+    header('Authentication')
+        .exists(),
+    isLogged,
 ], postAddTweet);
 
 router.delete('/delete', [
@@ -28,6 +29,8 @@ router.delete('/delete', [
             })
         })
         .withMessage('Tweet does not exist'),
+    header('Authentication')
+        .exists(),
     isLogged,
 ], deleteTweet);
 
