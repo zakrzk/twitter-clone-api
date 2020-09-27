@@ -38,7 +38,7 @@ Tweet.belongsTo(User, {
 User.hasMany(Tweet);
 
 sequelize
-    .sync({force: true})
+    .sync()
     .then(() => {
         app.listen(APP_PORT, () => {
             console.log(`Server running on http://localhost:${APP_PORT}`)

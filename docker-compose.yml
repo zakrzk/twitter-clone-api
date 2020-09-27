@@ -1,0 +1,43 @@
+version: "3.4"
+services:
+
+  twitter-api:
+    container_name: twitter-api
+    restart: always
+    build: .
+    ports:
+      - ${APP_PORT}:3005
+    links:
+      - sql
+    depends_on:
+      - sql
+    networks:
+      - app-network
+    environment:
+      - APP_PORT=${APP_PORT}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRY_AGE=${JWT_EXPIRY_AGE}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+
+  sql:
+    image: mysql:8.0.21
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: ${DB_HOST}
+    restart: always
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
