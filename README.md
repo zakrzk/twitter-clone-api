@@ -2,7 +2,7 @@
 
 REST API developed with Express and Sequelize.
 
-Deployed to AWS at `awslink`
+Deployed to AWS at `http://ec2-18-196-196-57.eu-central-1.compute.amazonaws.com:3005`
 
 ### How to run it
 
@@ -35,7 +35,7 @@ Request body:
     "password": "mySecret",
     "passwordConfirmation": "mySecret",
     "name": "Elton John",
-    "description": "I'm a Rocket Man"     // (optional)
+    "description": "I'm a Rocket Man"
 }
 ```
 **Response:**
@@ -121,7 +121,7 @@ ___
 
 Use this endpoint to delete a Tweet.
 
-Only the author of a Tweet can delete it, within 3 minutes from posting it.
+Only the author of a Tweet can delete it, within 3 minutes from posting.
 
 Request body:
 
@@ -132,7 +132,7 @@ Request body:
 ```
 
 Request `Authentication` header: 
-
+git 
 ```
 Bearer [JWT]
 ```
