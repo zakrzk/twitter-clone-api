@@ -54,11 +54,12 @@ export const postLoginUser = (req: Request, res: Response) => {
                         return res.send({err: 'Email / password did not match.'})
                     }
                     const token = jwt.sign({
-                        userId: tempUser.id,
-                        email: tempUser.email},
+                            userId: tempUser.id,
+                            email: tempUser.email
+                        },
                         process.env.JWT_SECRET,
                         {expiresIn: process.env.JWT_EXPIRY_AGE},
-                        );
+                    );
                     res.status(200).json({userId: tempUser.id, token: token});
                 })
                 .catch(err => console.log(err))

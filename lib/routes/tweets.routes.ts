@@ -3,6 +3,7 @@ import {body, header} from 'express-validator/check';
 import {getFeed, postAddTweet, deleteTweet} from '../controllers/tweet.controller';
 import {Tweet} from "../models/tweet.model";
 import {isLogged} from "../middleware/isLogged.middleware";
+import {RequestExtended, ResponseExtended} from "../../@types";
 
 const router = Router();
 

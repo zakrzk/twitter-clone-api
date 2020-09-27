@@ -34,7 +34,8 @@ router.post('/register', [
             .bail()
             .trim()
             .withMessage('Name must not be empty.'),
-        body('description').trim()
+        body('description')
+            .isLength({max: 128})
     ],
     postRegisterUser);
 

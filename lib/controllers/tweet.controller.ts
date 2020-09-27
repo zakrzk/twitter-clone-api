@@ -1,10 +1,11 @@
-import {Request, Response} from 'express';
+import {Response} from 'express';
+import {RequestExtended, ResponseExtended} from "../../@types";
 import {Tweet} from "../models/tweet.model";
 import {User} from "../models/user.model";
 import * as jwt from "jsonwebtoken";
 import {Result, validationResult} from "express-validator";
 
-export const postAddTweet = (req: Request, res: Response) => {
+export const postAddTweet = (req: RequestExtended, res: Response) => {
 
     let value: string = req.body.value;
 
@@ -15,7 +16,6 @@ export const postAddTweet = (req: Request, res: Response) => {
     const token: string = req.get('Authentication').split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    // @ts-ignore
     User.findByPk(decodedToken.userId)
         .then(user => user.createTweet({value: value}))
         .then(() => {
@@ -24,7 +24,7 @@ export const postAddTweet = (req: Request, res: Response) => {
         .catch(err => console.log(err));
 };
 
-export const getFeed = (req: Request, res: Response) => {
+export const getFeed = (req: RequestExtended, res: ResponseExtended) => {
     Tweet.findAll({
         limit: 100,
         order: [['updatedAt', 'DESC']],
@@ -39,7 +39,7 @@ export const getFeed = (req: Request, res: Response) => {
         .catch(err => console.log(err));
 };
 
-export const deleteTweet = (req: Request, res: Response) => {
+export const deleteTweet = (req: RequestExtended, res: Response) => {
 
     const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
@@ -49,7 +49,6 @@ export const deleteTweet = (req: Request, res: Response) => {
     const tweetId: number = req.body.tweetId;
     Tweet.findByPk(tweetId).then(tweetObj => {
 
-        // @ts-ignore
         if (tweetObj.userId !== req.userId) {
             res.status(401).json({err: 'Unauthorized. Your\'e not the author of this tweet.'})
         }

@@ -1,8 +1,9 @@
 import * as jwt from 'jsonwebtoken';
-import {NextFunction, Request, Response} from 'express';
+import {NextFunction, Response} from 'express';
 import {Result, validationResult} from "express-validator";
+import { RequestExtended } from "../../@types"
 
-export const isLogged = (req: Request, res: Response, next: NextFunction) => {
+export const isLogged = (req: RequestExtended, res: Response, next: NextFunction) => {
 
     const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
@@ -24,8 +25,6 @@ export const isLogged = (req: Request, res: Response, next: NextFunction) => {
             message: 'Not logged in'
         })
     }
-
-    // @ts-ignore
     req.userId = decodedToken.userId;
     next();
 };
