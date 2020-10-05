@@ -2,7 +2,7 @@
 
 REST API developed with Express and Sequelize.
 
-Deployed to AWS at `http://ec2-18-196-196-57.eu-central-1.compute.amazonaws.com:3005`
+~~Deployed to AWS at `http://ec2-18-196-196-57.eu-central-1.compute.amazonaws.com:3005`~~
 
 ### How to run it
 
